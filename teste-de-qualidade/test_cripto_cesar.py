@@ -3,81 +3,86 @@ from mod_jvbb2004 import cripto_cesar
 
 # Casos Tipicos: 
 
-def test_criptar_maiusculas():
-    assert cripto_cesar("ABC", 3) == "DEF"
+def test_cripto_minusculas():
+    assert cripto_cesar("abc", 2) == "cde"
 
-def test_criptar_minusculas():
-    assert cripto_cesar("abc", 3) == "def"
+def test_cripto_maiusculas():
+    assert cripto_cesar("ABC", 2) == "CDE"
 
-def test_criptar_mista():
-    assert cripto_cesar("AbC", 3) == "DeF"
+def test_cripto_mista():
+    assert cripto_cesar("AbC", 2) == "CdE"
 
-def test_espacos_e_numeros():
-    assert cripto_cesar("Oi 123!", 5) == "Tn 123!"
+def test_cripto_espacos_e_numeros():
+    assert cripto_cesar("Oi 123!", 2) == "Qk 123!"
 
 # Casos de borda:
 
-def test_string_vazia():
-    assert cripto_cesar(" ", 5) == " "
+def test_cripto_string_vazia():
+    assert cripto_cesar(" ", 2) == " "
 
-def test_k_zerado():
+def test_cripto_k_zerado():
     assert cripto_cesar("Morder", 0) == "Morder"
 
-def test_k_negativo():
+def test_cripto_k_negativo():
     assert cripto_cesar("DEF", -3) == "ABC"
 
-def test_ultima_letra_alfabeto():
+def test_cripto_ultima_letra_alfabeto():
     assert cripto_cesar("Zz", 1) == "Aa"
 
-def test_somenteSimbolos():
-    assert cripto_cesar("!@$%&*", 3) == "!@$%&*"
-
-def test_k_grande():
+def test_cripto_k_maior_que_alfabeto():
     assert cripto_cesar("abc", 27) == "bcd"
 
-# Exceções:
+def test_cripto_k_muito_grande():
+    assert cripto_cesar("abc", 52) == "abc" 
 
-def test_mensagem_nao_string():
-    with pytest.raises(TypeError):
-        cripto_cesar(123, 1)
+def test_cripto_somenteSimbolos():
+    assert cripto_cesar("!@$%&*", 3) == "!@$%&*"
 
-def test_k_nao_inteiro():
+# Exceções: (Utilizando pytest.raises)
+
+def test_cripto_k_nao_inteiro():
     with pytest.raises(TypeError):
         cripto_cesar("abc", "1")
 
-def test_mensagem_none():
+def test_cripto_mensagem_nao_string():
     with pytest.raises(TypeError):
-        cripto_cesar(None, 3)
+        cripto_cesar(123, 1)
+
+def test_cripto_mensagem_none():
+    with pytest.raises(TypeError):
+        cripto_cesar(None, 1)
 
 # Casos Tipicos com parametrize: (Mesmos Casos de Tipicos acima, mas usando parametrize)
 
-@pytest.mark.parametrize("mensagem,k,esperado", [
-    ("ABC", 3, "DEF"),             # Maiúsculas
-    ("abc", 3, "def"),             # Minúsculas
-    ("AbC", 3, "DeF"),             # Mistura de maiúsculas e minúsculas
-    ("Oi 123!", 5, "Tn 123!"),     # Caracteres não alfabéticos e Números
+@pytest.mark.parametrize("mensagem, k, esperado", [
+    ("abc", 2, "cde"),              # Minúsculas
+    ("ABC", 2, "CDE"),              # Maiúsculas
+    ("AbC", 2, "CdE"),              # Mistura de maiúsculas e minúsculas
+    ("Oi 123!", 2, "Qk 123!")       # Com espaços e números
 ])
-def test_cripto_cesar_casos_tipicos(mensagem, k, esperado):
+def test_cripto_parametrize(mensagem, k, esperado):
     assert cripto_cesar(mensagem, k) == esperado
 
 #Casos de borda com parametrize: (Mesmos Casos de Bordas acima, mas usando parametrize)
 
-@pytest.mark.parametrize("mensagem,k,esperado", [
-    ("", 5, ""),              # String vazia
-    ("abc", 0, "abc"),        # k = 0
-    ("bcd", -1, "abc"),       # k negativo
-    ("abc", 27, "bcd"),       # k maior que 26
+@pytest.mark.parametrize("mensagem, k, esperado", [
+    (" ", 2, " "),                  # String vazia (apenas espaço)
+    ("Morder", 0, "Morder"),        # k = 0
+    ("DEF", -3, "ABC"),             # k negativo
+    ("Zz", 1, "Aa"),                # Última letra do alfabeto
+    ("abc", 27, "bcd"),             # k grande
+    ("!@$%&*", 3, "!@$%&*")         # Apenas símbolos
 ])
-def test_cripto_cesar_borda(mensagem, k, esperado):
+def test_cripto_borda_parametrize(mensagem, k, esperado):
     assert cripto_cesar(mensagem, k) == esperado
 
-#Exceções com parametrize: (Mesmos Casos de Exceções acima, mas usando parametrize)
+# Exceções com parametrize: (Mesmos Casos de Exceções acima, mas usando parametrize)
 
-@pytest.mark.parametrize("mensagem,k,esperado", [
-    (123, 1, "TypeError"),        # Mensagem não é string
-    ("abc", "1", "TypeError"),     # k não é inteiro
-    (None, 3, "TypeError"),        # Mensagem é None
+@pytest.mark.parametrize("mensagem, k", [
+    (123, 1),       # Mensagem não é string
+    ("abc", "1"),   # k não é inteiro
+    (None, 1)       # Mensagem é None
 ])
-def test_cripto_cesar_excecoes(mensagem, k, esperado):
+def test_cripto_excecoes_parametrize(mensagem, k):
     with pytest.raises(TypeError):
         cripto_cesar(mensagem, k)
