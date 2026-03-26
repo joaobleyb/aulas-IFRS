@@ -32,7 +32,8 @@ def test_conta_caracteres_borda_parametrizado(mensagem, esperado):
 @pytest.mark.parametrize("mensagem", [
     None,                       # None
     123,                        # Inteiro
-    5.5                         # Float
+    5.5,                        # Float
+    True                        # Boolean
 ])
 def test_conta_caracteres_excecao_parametrizado(mensagem):
     with pytest.raises(AttributeError):

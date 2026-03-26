@@ -30,7 +30,8 @@ def test_cripto_borda_parametrize(mensagem, k, esperado):
 @pytest.mark.parametrize("mensagem, k", [
     (123, 1),       # Mensagem não é string
     ("abc", "1"),   # k não é inteiro
-    (None, 1)       # Mensagem é None
+    (None, 1),      # Mensagem é None
+    (True, 1)       # Boolean
 ])
 def test_cripto_excecoes_parametrize(mensagem, k):
     with pytest.raises(TypeError):
