@@ -52,9 +52,19 @@
 
 <?php
 
+$bloqueado = isset($_COOKIE["ja_enviou"]);
+
+if ($bloqueado) {
+    echo "Você já enviou o formulário!";
+}
+
 if (isset($_POST["enviar"])) {
 
-if (!isset($_POST["nome"]) or empty($_POST["nome"])) {
+if ($bloqueado) {
+
+    echo "Você já enviou o formulário!";
+
+} elseif (!isset($_POST["nome"]) or empty($_POST["nome"])) {
     echo "Preencha o nome!";
 
 } elseif (!isset($_POST["telefone"]) or empty($_POST["telefone"])) {
@@ -107,6 +117,8 @@ if (!isset($_POST["nome"]) or empty($_POST["nome"])) {
         } else {
             echo ("Streaming: <b>Nenhum selecionado</b>");
         }
+
+        setcookie("ja_enviou", "sim", time() + 3600);
     }
 }
 ?>

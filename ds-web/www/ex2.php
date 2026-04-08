@@ -15,9 +15,19 @@
 
 <?php
 
+$bloqueado = isset($_COOKIE["ja_enviou"]);
+
+if ($bloqueado) {
+    echo "Você já enviou o formulário!";
+}
+
 if (isset($_GET["enviar"])) {
 
-    if (!isset($_GET["numero"]) or empty($_GET["numero"])) {
+    if ($bloqueado) {
+
+        echo "Você já enviou o formulário!";
+
+    } elseif (!isset($_GET["numero"]) or empty($_GET["numero"])) {
 
         echo "Preencha o campo obrigatório!";
 
@@ -41,6 +51,8 @@ if (isset($_GET["enviar"])) {
         } else {
             echo "<br><b>$numero</b> NÃO é um número perfeito.";
         }
+
+        setcookie("ja_enviou", "sim", time() + 3600);
 
     }
 }

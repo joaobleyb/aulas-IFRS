@@ -16,9 +16,19 @@
 
 <?php
 
+$bloqueado = isset($_COOKIE["ja_enviou"]);
+
+if ($bloqueado) {
+    echo "Você já enviou o formulário!";
+}
+
 if (isset($_POST["enviar"])) {
 
-    if (!isset($_POST["nome"]) or empty($_POST["nome"]) ||
+    if ($bloqueado) {
+
+        echo "Você já enviou o formulário!";
+
+    } elseif (!isset($_POST["nome"]) or empty($_POST["nome"]) ||
         !isset($_POST["nota"]) or empty($_POST["nota"])) {
 
         echo "Preencha todos os campos obrigatórios!";
@@ -51,6 +61,8 @@ if (isset($_POST["enviar"])) {
         } else {
             $situacao = "REPROVADO";
         }
+
+        setcookie("ja_enviou", "sim", time() + 3600);
 
         echo "<br><b>$nome</b> tem a nota <b>$nota</b>, conceito <b>$conceito</b> e está <b>$situacao</b>.";
 
